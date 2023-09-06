@@ -3,6 +3,14 @@
 - install tailwing css
 - configure tailwing.config
 - put tailwind directive in index.css
+- Routing app
+- Login Form
+- Signup Form
+- Form Validation
+- useRef hook
+- Firebase setup
+- Deplyoment on firebase
+- Create Sign Up user account
 
 #Features
 -Login/ Sign Up
