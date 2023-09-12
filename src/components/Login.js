@@ -1,17 +1,51 @@
 import React, { useState, useRef } from 'react'
 import Header from './Header'
 import {checkValidData} from '../utils/Validate'
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../utils/Firebase';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true)
   const [errorMessage, setErrorMessage] = useState()
 
-  const email = useRef()
-  const password = useRef()
+
+  const email = useRef(null)
+  const password = useRef(null)
+  const name = useRef(null)
+  const navigate = useNavigate()
+
 
   const handleClickButton = ()=> {
     const message = checkValidData(email.current.value, password.current.value)
     setErrorMessage(message)
+
+    if(message) return;
+    
+    if(!isSignIn){
+      createUserWithEmailAndPassword(auth,email.current.value, password.current.value).then((userCredential)=>{
+        const user = userCredential.user;
+        navigate("/Browse")
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setErrorMessage(errorCode +"-"+ errorMessage)
+      })
+    }
+    else{
+      signInWithEmailAndPassword(auth, email.current.value, password.current.value).then((userCredential) => {
+      
+      const user = userCredential.user;
+      // console.log(user);  
+      navigate("/Browse")
+  })
+  .catch((error) => {
+    setErrorMessage("User Not Found")
+  });
+
+    }
   }
 
   const toggleSignInForm = () =>{
@@ -37,7 +71,7 @@ const Login = () => {
       </h1>
 
       {!isSignIn && (
-        <input 
+        <input ref={name}
         className="my-4 p-4 rounded-lg w-full bg-gray-600" 
         type='text' 
         placeholder='Name'
