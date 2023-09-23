@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useRef } from "react";
 import Header from "./Header";
 import { checkValidData } from "../utils/Validate";
@@ -59,7 +60,6 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log(user);
           navigate("/browse");
         })
         .catch((error) => {
